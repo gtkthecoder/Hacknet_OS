@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker Simulation v2.0</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700;800&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="logo">
+                <i class="fas fa-terminal"></i>
+                <span>HACKNET_OS</span>
+                <div class="version">v2.0.7</div>
+            </div>
+            <div class="system-stats">
+                <div class="stat">
+                    <span class="label">DETECTION:</span>
+                    <div class="detection-meter">
+                        <div class="meter-fill" id="detection-fill"></div>
+                        <span class="meter-text" id="detection-text">0%</span>
+                    </div>
+                </div>
+                <div class="stat">
+                    <span class="label">POPULATION:</span>
+                    <span class="value" id="global-population">8,000,000,000</span>
+                </div>
+                <div class="stat">
+                    <span class="label">HACKED:</span>
+                    <span class="value" id="hacked-count">0</span>/<span id="total-countries">0</span>
+                </div>
+                <div class="stat">
+                    <span class="label">POINTS:</span>
+                    <span class="value" id="points-counter">0</span>
+                </div>
+            </div>
+            <div class="difficulty-selector">
+                <select id="difficulty-select">
+                    <option value="easy">EASY MODE</option>
+                    <option value="medium" selected>MEDIUM MODE</option>
+                    <option value="hard">HARD MODE</option>
+                    <option value="extreme">EXTREME</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Left Panel: World Map -->
+            <div class="left-panel">
+                <div class="panel-header">
+                    <i class="fas fa-globe-americas"></i>
+                    <h2>GLOBAL NETWORK MAP</h2>
+                    <div class="connection-status">
+                        <div class="status-indicator connected"></div>
+                        <span>CONNECTED</span>
+                    </div>
+                </div>
+                <div class="map-container">
+                    <svg id="world-map" viewBox="0 0 2000 1000">
+                        <!-- World map paths will be inserted here by JavaScript -->
+                    </svg>
+                    <div class="map-overlay">
+                        <div class="scanline"></div>
+                        <div class="crosshair"></div>
+                    </div>
+                </div>
+                <div class="map-controls">
+                    <button class="btn" id="zoom-in"><i class="fas fa-search-plus"></i></button>
+                    <button class="btn" id="zoom-out"><i class="fas fa-search-minus"></i></button>
+                    <button class="btn" id="center-map"><i class="fas fa-crosshairs"></i></button>
+                    <button class="btn" id="reset-game"><i class="fas fa-redo"></i> RESET</button>
+                </div>
+            </div>
+
+            <!-- Right Panel: Terminal -->
+            <div class="right-panel">
+                <div class="panel-header">
+                    <i class="fas fa-terminal"></i>
+                    <h2 id="terminal-title">SYSTEM TERMINAL</h2>
+                    <div class="terminal-status" id="terminal-status">
+                        <span>IDLE</span>
+                    </div>
+                </div>
+                
+                <div class="terminal-container">
+                    <!-- Terminal Output -->
+                    <div class="terminal-output" id="terminal-output">
+                        <div class="terminal-line">
+                            <span class="prompt">root@hacknet:~#</span>
+                            <span class="command">system_init</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="output">Initializing HACKNET OS v2.0.7...</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="output">Loading global network map...</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="output">Detection system: <span class="success">ACTIVE</span></span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="output">Select a country from the map to begin.</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Country Info Display -->
+                    <div class="country-info" id="country-info">
+                        <div class="info-header">
+                            <h3><i class="fas fa-flag"></i> SELECTED TARGET</h3>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-row">
+                                <span class="label">COUNTRY:</span>
+                                <span class="value" id="info-country">--</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">POPULATION:</span>
+                                <span class="value" id="info-population">--</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">DIFFICULTY:</span>
+                                <span class="value" id="info-difficulty">--</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">STATUS:</span>
+                                <span class="value" id="info-status">UNSCANNED</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">NUCLEAR POWER:</span>
+                                <span class="value" id="info-nuclear">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hacking Controls -->
+                    <div class="hacking-controls" id="hacking-controls">
+                        <button class="btn btn-hack" id="btn-hack" disabled>
+                            <i class="fas fa-user-secret"></i> INITIATE HACK
+                        </button>
+                        <button class="btn btn-attack" id="btn-attack" disabled>
+                            <i class="fas fa-rocket"></i> LAUNCH ATTACK
+                        </button>
+                        <button class="btn btn-upgrade" id="btn-upgrade" disabled>
+                            <i class="fas fa-cogs"></i> UPGRADES
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Minigame Container (Hidden by default) -->
+                <div class="minigame-container" id="minigame-container">
+                    <div class="minigame-header">
+                        <h3><i class="fas fa-gamepad"></i> FIREWALL BYPASS MINIGAME</h3>
+                        <div class="minigame-stats">
+                            <span>BLOCKS: <span id="block-count">0</span></span>
+                            <span>BALLS: <span id="ball-count">3</span></span>
+                            <span>SCORE: <span id="minigame-score">0</span></span>
+                        </div>
+                    </div>
+                    <canvas id="minigame-canvas" width="600" height="400"></canvas>
+                    <div class="minigame-controls">
+                        <button class="btn" id="shoot-ball"><i class="fas fa-bullseye"></i> FIRE</button>
+                        <button class="btn" id="pause-game"><i class="fas fa-pause"></i> PAUSE</button>
+                        <button class="btn" id="quit-game"><i class="fas fa-times"></i> ABORT</button>
+                    </div>
+                    <div class="minigame-perks">
+                        <h4>AVAILABLE PERKS:</h4>
+                        <div class="perks-list">
+                            <button class="perk-btn" data-perk="clear" disabled><i class="fas fa-bomb"></i> CLEAR ALL</button>
+                            <button class="perk-btn" data-perk="extra-ball" disabled><i class="fas fa-plus-circle"></i> +1 BALL</button>
+                            <button class="perk-btn" data-perk="explosive" disabled><i class="fas fa-fire"></i> EXPLOSIVE</button>
+                            <button class="perk-btn" data-perk="slow" disabled><i class="fas fa-tachometer-alt"></i> SLOW DESCENT</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Upgrades Panel (Hidden by default) -->
+                <div class="upgrades-panel" id="upgrades-panel">
+                    <div class="upgrades-header">
+                        <h3><i class="fas fa-cogs"></i> SYSTEM UPGRADES</h3>
+                        <button class="btn-close" id="close-upgrades"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="upgrades-grid" id="upgrades-grid">
+                        <!-- Upgrades will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Bar: Log -->
+        <div class="bottom-bar">
+            <div class="log-header">
+                <i class="fas fa-scroll"></i>
+                <h3>SYSTEM LOG</h3>
+            </div>
+            <div class="log-content" id="system-log">
+                <div class="log-entry success">System initialized successfully.</div>
+                <div class="log-entry">Waiting for user input...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Phase Modal (Hidden) -->
+    <div class="final-modal" id="final-modal">
+        <div class="final-content">
+            <div class="glitch-text" data-text="WARNING: DETECTION REACHED 100%">WARNING: DETECTION REACHED 100%</div>
+            <div class="final-message">
+                <h1>YOU WERE DETECTED</h1>
+                <p class="final-subtitle">Global defense systems have locked onto your position.</p>
+                <p class="final-instruction">Final option available:</p>
+                <button class="btn-final" id="final-launch-btn">
+                    <i class="fas fa-rocket"></i>
+                    <span class="pulse-text">LAUNCH ALL WARHEADS</span>
+                    <i class="fas fa-rocket"></i>
+                </button>
+                <p class="final-warning">This action is irreversible and will end the simulation.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cinematic Overlay (Hidden) -->
+    <div class="cinematic-overlay" id="cinematic-overlay">
+        <div class="missile-strike" id="missile-strike"></div>
+        <div class="population-counter" id="final-population">8,000,000,000</div>
+        <div class="simulation-complete" id="simulation-complete">
+            <h1>SIMULATION COMPLETE</h1>
+            <p class="completion-stats">
+                Final Population: <span id="final-population-result">0</span><br>
+                Countries Hacked: <span id="final-hacked-result">0</span><br>
+                Total Points: <span id="final-points-result">0</span>
+            </p>
+            <div class="completion-actions">
+                <button class="btn-restart" id="restart-game"><i class="fas fa-redo"></i> RESTART SIMULATION</button>
+                <button class="btn-difficulty" id="change-difficulty"><i class="fas fa-sliders-h"></i> CHANGE DIFFICULTY</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3"></audio>
+    <audio id="hack-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-computer-circuit-bleep-908.mp3"></audio>
+    <audio id="alert-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3"></audio>
+    <audio id="explosion-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-explosion-with-falling-debris-1993.mp3"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
